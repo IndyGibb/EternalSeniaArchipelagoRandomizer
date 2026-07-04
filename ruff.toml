@@ -14,3 +14,6 @@ ignore = [
     "PLE1141",  # Gives false positives when the dict keys are tuples, but does not mention this in the suggested fix.
     "UP015",  # Explicit is better than implicit, so we'd prefer to keep "r" in open() calls.
 ]
+
+[format]
+quote-style = "double"
