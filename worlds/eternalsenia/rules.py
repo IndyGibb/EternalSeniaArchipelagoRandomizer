@@ -8,7 +8,7 @@ from rule_builder.rules import Has, HasAll, Rule
 from .options import HardMode
 
 if TYPE_CHECKING:
-    from .world import APQuestWorld
+    from .world import EternalSeniaWorldWorld
 
 HAS_KEY = Has("Key")  # Hmm, what could this be? A little foreshadowing perhaps? :) You'll find out if you keep reading!
 
@@ -70,6 +70,7 @@ def set_all_entrance_rules(world: APQuestWorld) -> None:
     # Rule Builder also allows the core AP code to do a lot of under-the-hood optimizations.
     # Rule Builder is quite comprehensive, and even if you have really esoteric rules,
     # you can make custom rules by subclassing CustomRule.
+
 
 def set_all_location_rules(world: APQuestWorld) -> None:
     # Location rules work no differently from Entrance rules.

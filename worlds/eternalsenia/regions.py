@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from BaseClasses import Entrance, Region
 
 if TYPE_CHECKING:
-    from .world import APQuestWorld
+    from .world import EternalSeniaWorld
 
 # A region is a container for locations ("checks"), which connects to other regions via "Entrance" objects.
 # Many games will model their Regions after physical in-game places, but you can also have more abstract regions.
@@ -17,24 +17,25 @@ if TYPE_CHECKING:
 # This is why we create regions first, and then later we create the locations (in locations.py).
 
 
-def create_and_connect_regions(world: APQuestWorld) -> None:
+def create_and_connect_regions(world: EternalSeniaWorld) -> None:
     create_all_regions(world)
     connect_regions(world)
 
 
-def create_all_regions(world: APQuestWorld) -> None:
+def create_all_regions(world: EternalSeniaWorld) -> None:
     # Creating a region is as simple as calling the constructor of the Region class.
-    overworld = Region("Overworld", world.player, world.multiworld)
-    top_left_room = Region("Top Left Room", world.player, world.multiworld)
-    bottom_right_room = Region("Bottom Right Room", world.player, world.multiworld)
-    right_room = Region("Right Room", world.player, world.multiworld)
-    final_boss_room = Region("Final Boss Room", world.player, world.multiworld)
+    tower_entrance = Region("Tower Entrance", world.player, world.multiworld)
+    fairy_forest = Region("Fairy Forest", world.player, world.multiworld)
+    demon_frontier = Region("Demon Frontier", world.player, world.multiworld)
+    fallen_sanctum = Region("Fallen Sanctum", world.player, world.multiworld)
+    holy_chamber = Region("Holy Chamber", world.player, world.multiworld)
 
     # Let's put all these regions in a list.
-    regions = [overworld, top_left_room, bottom_right_room, right_room, final_boss_room]
+    regions = [tower_entrance, fairy_forest, demon_frontier, fallen_sanctum, holy_chamber]
 
     # Some regions may only exist if the player enables certain options.
     # In our case, the Hammer locks the top middle chest in its own room if the hammer option is enabled.
+    # TODO:
     if world.options.hammer:
         top_middle_room = Region("Top Middle Room", world.player, world.multiworld)
         regions.append(top_middle_room)
@@ -43,16 +44,17 @@ def create_all_regions(world: APQuestWorld) -> None:
     world.multiworld.regions += regions
 
 
-def connect_regions(world: APQuestWorld) -> None:
+# TODO: Add in region connections
+def connect_regions(world: EternalSeniaWorld) -> None:
     # We have regions now, but still need to connect them to each other.
     # But wait, we no longer have access to the region variables we created in create_all_regions()!
     # Luckily, once you've submitted your regions to multiworld.regions,
     # you can get them at any time using world.get_region(...).
-    overworld = world.get_region("Overworld")
-    top_left_room = world.get_region("Top Left Room")
-    bottom_right_room = world.get_region("Bottom Right Room")
-    right_room = world.get_region("Right Room")
-    final_boss_room = world.get_region("Final Boss Room")
+    tower_entrance = world.get_region("Tower Entrance")
+    fairy_forest = world.get_region("Fairy Forest")
+    demon_frontier = world.get_region("Demon Frontier")
+    fallen_sanctum = world.get_region("Fallen Sanctum")
+    holy_chamber = world.get_region("Holy Chamber")
 
     # Okay, now we can get connecting. For this, we need to create Entrances.
     # Entrances are inherently one-way, but crucially, AP assumes you can always return to the origin region.
