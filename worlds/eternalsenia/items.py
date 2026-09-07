@@ -5,20 +5,28 @@ from typing import TYPE_CHECKING
 from BaseClasses import Item, ItemClassification
 
 if TYPE_CHECKING:
-    from .world import APQuestWorld
+    from .world import EternalSeniaWorld
 
 # Every item must have a unique integer ID associated with it.
 # We will have a lookup from item name to ID here that, in world.py, we will import and bind to the world class.
 # Even if an item doesn't exist on specific options, it must be present in this lookup.
 ITEM_NAME_TO_ID = {
-    "Key": 1,
-    "Sword": 2,
-    "Shield": 3,
-    "Hammer": 4,
-    "Health Upgrade": 5,
-    "Confetti Cannon": 6,
-    "Math Trap": 7,
+    "Phantom Strike": 1,
+    "Splash Leap": 2,
+    "Fairy Attack": 3,
+    "Eternity Burst": 4,
+    "Health Elixir": 5,
+    "Magic Elixir": 6,
+    "Master Elixir": 7,
+    "Broken Sword": 8,
+    "Fine Wood": 9,
+    "Broken Armor": 10,
+    "Legendary Fairy Stone": 11,
+    "Legendary Demon Stone": 12,
+    "Legendary Sanctum Stone": 13,
+    "Book of Defense I": 14,
 }
+# TODO: Finish items
 
 # Items should have a defined default classification.
 # In our case, we will make a dictionary from item name to classification.
@@ -35,14 +43,14 @@ DEFAULT_ITEM_CLASSIFICATIONS = {
 
 # Each Item instance must correctly report the "game" it belongs to.
 # To make this simple, it is common practice to subclass the basic Item class and override the "game" field.
-class APQuestItem(Item):
-    game = "APQuest"
+class EternalSeniaItem(Item):
+    game: str = "Eternal Senia"
 
 
 # Ontop of our regular itempool, our world must be able to create arbitrary amounts of filler as requested by core.
 # To do this, it must define a function called world.get_filler_item_name(), which we will define in world.py later.
 # For now, let's make a function that returns the name of a random filler item here in items.py.
-def get_random_filler_item_name(world: APQuestWorld) -> str:
+def get_random_filler_item_name(world: EternalSeniaWorld) -> str:
     # APQuest has an option called "trap_chance".
     # This is the percentage chance that each filler item is a Math Trap instead of a Confetti Cannon.
     # For this purpose, we need to use a random generator.
@@ -55,7 +63,7 @@ def get_random_filler_item_name(world: APQuestWorld) -> str:
     return "Confetti Cannon"
 
 
-def create_item_with_correct_classification(world: APQuestWorld, name: str) -> APQuestItem:
+def create_item_with_correct_classification(world: EternalSeniaWorld, name: str) -> EternalSeniaItem:
     # Our world class must have a create_item() function that can create any of our items by name at any time.
     # So, we make this helper function that creates the item by name with the correct classification.
     # Note: This function's content could just be the contents of world.create_item in world.py directly,

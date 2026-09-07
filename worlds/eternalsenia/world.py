@@ -23,7 +23,9 @@ from . import options as apquest_options  # rename due to a name conflict with W
 # regions.py, locations.py, rules.py, items.py, options.py and web_world.py.
 # It is recommended that you read these in that specific order, then come back to the world class.
 class EternalSeniaWorld(World):
-    """ """
+    """Eternal Senia is a 2015 freeware rpgmaker vx ace action rpg that revolves around "bump combat",
+    with a female protagonist looking for her adoptive older sister.
+    It includes multiple chests, boss rewards, and rewards from npcs."""
 
     # TODO: Insert Eternal Senia Information Here
 
@@ -37,8 +39,10 @@ class EternalSeniaWorld(World):
 
     # This is how we associate the options defined in our options.py with our world.
     # (Note: options.py has been imported as "apquest_options" at the top of this file to avoid a name conflict)
-    options_dataclass = apquest_options.APQuestOptions
-    options: apquest_options.APQuestOptions  # Common mistake: This has to be a colon (:), not an equals sign (=).
+    options_dataclass = eternalsenia_options.EternalSeniaOptions
+    options: (
+        eternalsenia_options.EternalSeniaOptions
+    )  # Common mistake: This has to be a colon (:), not an equals sign (=).
 
     # Our world class must have a static location_name_to_id and item_name_to_id defined.
     # We define these in regions.py and items.py respectively, so we just set them here.

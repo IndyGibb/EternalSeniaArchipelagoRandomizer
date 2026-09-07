@@ -8,12 +8,12 @@ from rule_builder.rules import Has, HasAll, Rule
 from .options import HardMode
 
 if TYPE_CHECKING:
-    from .world import EternalSeniaWorldWorld
+    from .world import EternalSeniaWorld
 
 HAS_KEY = Has("Key")  # Hmm, what could this be? A little foreshadowing perhaps? :) You'll find out if you keep reading!
 
 
-def set_all_rules(world: APQuestWorld) -> None:
+def set_all_rules(world: EternalSeniaWorld) -> None:
     # In order for AP to generate an item layout that is actually possible for the player to complete,
     # we need to define rules for our Entrances and Locations.
     # Note: Regions do not have rules, the Entrances connecting them do!
@@ -24,47 +24,50 @@ def set_all_rules(world: APQuestWorld) -> None:
     set_completion_condition(world)
 
 
-def set_all_entrance_rules(world: APQuestWorld) -> None:
+def set_all_entrance_rules(world: EternalSeniaWorld) -> None:
     # First, we need to actually grab our entrances. Luckily, there is a helper method for this.
-    overworld_to_bottom_right_room = world.get_entrance("Overworld to Bottom Right Room")
-    overworld_to_top_left_room = world.get_entrance("Overworld to Top Left Room")
-    right_room_to_final_boss_room = world.get_entrance("Right Room to Final Boss Room")
+    tower_entrance_to_fairy_forest = world.get_entrance("Tower Entrance to Fairy Forest")
+    tower_entrance_to_demon_frontier = world.get_entrance("Tower Entrance to Demon Frontier")
+    tower_entrance_to_fallen_sanctum = world.get_entrance("Tower Entrance to Fallen Sanctum")
+    tower_entrance_to_holy_chamber = world.get_entrance("Tower Entrance to Holy Chamber")
 
     # Now, let's make some rules!
     # First, let's handle the transition from the overworld to the bottom right room,
     # which requires slashing a bush with the Sword.
     # For this, we need a rule that says "player has a Sword".
     # We can use a "Has"-type rule from the rule_builder module for this.
-    can_destroy_bush = Has("Sword")
+    can_teleport = Has("Can Teleport")
 
     # Now we can set our "can_destroy_bush" rule to the entrance which requires slashing a bush to clear the path.
     # The easiest way to do this is by calling world.set_rule, which works for both Locations and Entrances.
-    world.set_rule(overworld_to_bottom_right_room, can_destroy_bush)
+    world.set_rule(tower_entrance_to_fairy_forest, can_teleport)
 
     # Conditions can also depend on event items.
-    button_pressed = Has("Top Left Room Button Pressed")
-    world.set_rule(right_room_to_final_boss_room, button_pressed)
+    # button_pressed = Has("Top Left Room Button Pressed")
+    world.set_rule(tower_entrance_to_demon_frontier, can_teleport)
+    world.set_rule(tower_entrance_to_fallen_sanctum, can_teleport)
+    world.set_rule(tower_entrance_to_holy_chamber, can_teleport)
 
     # Some entrance rules may only apply if the player enabled certain options.
     # In our case, if the hammer option is enabled, we need to add the Hammer requirement to the Entrance from
     # Overworld to the Top Middle Room.
-    if world.options.hammer:
-        overworld_to_top_middle_room = world.get_entrance("Overworld to Top Middle Room")
-        can_smash_brick = Has("Hammer")
-        world.set_rule(overworld_to_top_middle_room, can_smash_brick)
+    # if world.options.hammer:
+    #    overworld_to_top_middle_room = world.get_entrance("Overworld to Top Middle Room")
+    #    can_smash_brick = Has("Hammer")
+    #    world.set_rule(overworld_to_top_middle_room, can_smash_brick)
 
     # So far, we've been using "Has" from the Rule Builder to make our rules.
     # There is another way to make rules that you will see in a lot of older worlds.
     # A rule can just be a function that takes a "state" argument and returns a bool.
     # As a demonstration of what that looks like, let's do it with our final Entrance rule:
-    world.set_rule(overworld_to_top_left_room, lambda state: state.has("Key", world.player))
+    # world.set_rule(overworld_to_top_left_room, lambda state: state.has("Key", world.player))
     # This style is not really recommended anymore, though.
     # Notice how you have to explicitly capture world.player here so that the rule applies to the correct player?
     # Well, Rule Builder does this part for you, inside of world.set_rule.
     # This doesn't just result in shorter code, it also means you can define rules statically (at the module level).
     # APQuest opts to create its Rule objects locally, but just to show what this would look like,
     # we'll re-set the "Overworld to Top Left Room" rule to a constant defined at the top of this file:
-    world.set_rule(overworld_to_top_left_room, HAS_KEY)
+    # world.set_rule(overworld_to_top_left_room, HAS_KEY)
 
     # Beyond these structural advantages,
     # Rule Builder also allows the core AP code to do a lot of under-the-hood optimizations.
@@ -72,7 +75,7 @@ def set_all_entrance_rules(world: APQuestWorld) -> None:
     # you can make custom rules by subclassing CustomRule.
 
 
-def set_all_location_rules(world: APQuestWorld) -> None:
+def set_all_location_rules(world: EternalSeniaWorld) -> None:
     # Location rules work no differently from Entrance rules.
     # Most of our locations are chests that can simply be opened by walking up to them.
     # Thus, their logical requirements are covered by the Entrance rules of the Entrances that were required to
